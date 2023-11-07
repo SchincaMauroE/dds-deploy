@@ -9,9 +9,13 @@ orbs:
   docker: circleci/docker@1.5.0
 
 executors:
- docker-publisher: 
-  docker: 
-  - image: circleci/node:latest
+  java17:
+    docker:
+      - image: 'cimg/openjdk:17.0'
+
+  docker-publisher: 
+    docker: 
+      - image: circleci/node:latest
     auth:
       username: $DOCKERHUB_USERNAME
       password: $DOCKERHUB_PASSWORD
@@ -51,6 +55,9 @@ workflows:
   maven_test:
     jobs:
       - maven/test
+      command: '-X compile'
+          executor: java17
+
   deploy:
     jobs:
       - publishLatestToHub
